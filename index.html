@@ -15,13 +15,15 @@ th, td {
 }
 tr:nth-child(even){background-color: #eee}
 td:nth-child(1){color: #aaa}
-td:nth-child(2){font-weight: 900; text-align: right; border-right: 1px solid #ccc;};
+td:nth-child(2){font-weight: 900; text-align: right; border-right: 1px solid #ccc;}
+td:nth-child(3){width: 100%;}
 div.tooltip {
     display: inline;
 }
 .tooltiptext {
     visibility: hidden;
-    background-color: #ff5;
+	background-color: #fea;
+    padding: 0.5em;
     position: absolute;
     z-index: 1;
     margin-top: 1.5em;
@@ -29,10 +31,28 @@ div.tooltip {
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+.highlight {
+    font-weight: bold;
+	background-color: #aef;
+}
+.highlightmsg {
+	background-color: #dfa!important;
+}
+#user{
+    width: 8em;
+}
+#msgnum{
+    width: 5em;
+}
 </style>
 </head>
 <body>
-<span><b><a href="https://atomicgameengine.com/">Atomic</a> Gitter Archive by <a href="https://twitter.com/AlanGameDev">AlanGameDev</a> </b>| Messages: 101474, Users: 280, Updated: 2017-06-20</span><br>
+<span><b><a href="https://atomicgameengine.com/">Atomic</a> Gitter Archive by <a href="https://twitter.com/AlanGameDev">AlanGameDev</a> </b>| Messages: 101474, Users: 280, Updated: 2017-06-20</span>
+<div class="tooltip">
+<span class="tooltiptext">Type a message number and press enter. This is used to link results to conversation contexts</span>
+<input placeholder="Message #" type="text" id="msgnum">
+</div>
+<br>
 <input placeholder="Search... (press Enter)" type="text" id="filter">
 <span>User:</span>
 <select id="user">
@@ -320,7 +340,7 @@ div.tooltip {
 </select>
 <!-- <input id="autosearch" type="checkbox">Automatic (or press Enter)</input> -->
 <span>Results:</span>
-<div class="tooltip" style="display:inline;">
+<div class="tooltip">
 <span class="tooltiptext">If search is NOT fuzzy and you select 100 results, it searches as you type</span>
 <select id="quantity">
 	<option value="100">100</option>
@@ -341,6 +361,11 @@ var searched = false;
 $(function() {
     $.getJSON("log.json", function (data) {
 		json = data;
+		
+		for (i = 0; i < json.length; i++) {
+			json[i].mid = json.length-1-i;
+		};
+		
 		$("#loading").remove();
 		if(!searched) populateLasts();
 	});
@@ -359,6 +384,29 @@ $('#quantity').change(function(e) {
 $('#user').change(function(e) {
 	updateInput();
 });
+
+var msghl = -1;
+$('#msgnum').keyup(function(e) {
+	if(e.which != 13) return;
+	goToMessage($('#msgnum').val());
+});
+
+function goToMessage(id){
+
+	$('#user').val("All");
+
+	var curMsg = json.length-1-id;
+	
+	var results = [];
+	var rStart = Math.max(0,curMsg-5);
+	var rEnd = Math.min(json.length,curMsg+6);
+	for (i = rStart; i < rEnd; i++) {
+		results.push(json[i]);
+	}
+	
+	msghl = id;
+	populateWithData(results);
+}
 
 function updateInput(){
 	if(json === 'undefined') return;
@@ -380,7 +428,7 @@ function updateInput(){
 				//$('#user').val() == "All" || json[i].user.toLowerCase() == user.toLowerCase() //user match exit TODO REFACTOR
 				//)
 			){
-				matches.push(json[i])
+				matches.push(json[i]);
 				c++;
 				//if (c>$('#quantity').val())	break;
 			}
@@ -402,12 +450,29 @@ function populateWithData(data){
 	//for (i = 0; i < Math.min(data.length, $('#quantity').val()); i++) { //TODO inform user when we reached max allowed
 	var max = $('#quantity').val()
 	var c = 0;
+	var kw = $("#filter").val();
+
 	for (i = 0; i < (data.length); i++) {
 		if(user == "all" || data[i].user.toLowerCase() == user){
-			$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+data[i].html+"</td></tr>");
+			var msg;
+			if(kw && kw.length > 2)
+				msg = data[i].html.replace(new RegExp(kw, 'g'), '<span class="highlight">' + kw + '</span>');
+			else
+				msg = data[i].html;
+		
+			var resHtml = '<tr><td><a onclick="goToMessage('+data[i].mid+')" href="#"><small>'+data[i].date+"<br>#"+data[i].mid+"</small></a></td><td>"+data[i].user+"</td><td>"+msg+"</td></tr>";
+			if(msghl >= 0 && data[i].mid == msghl){
+				resHtml = resHtml.substr(0, 3) + ' class="highlightmsg"' + resHtml.substr(3);
+				msghl=-1;
+			}
+						
+			//$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+msg+"</td></tr>");
+			$("#results").append(resHtml);
 			c++; if (c>max)	break; //TODO inform user when we reached max allowed
 		}
 	};
+	msghl = -1;
+	
 }
 
 </script>

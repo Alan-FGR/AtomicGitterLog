@@ -32,7 +32,7 @@ for key in hist:
         'html': msg
     })
 
-open("log.json", 'w').write(json.dumps(data))  # , indent=2))
+#open("log.json", 'w').write(json.dumps(data))  # , indent=2))
 
 users.sort()
 users.insert(0,"All")
