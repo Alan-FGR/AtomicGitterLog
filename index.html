@@ -425,8 +425,8 @@ function goToMessage(id){
 	var curMsg = json.length-1-id;
 	
 	var results = [];
-	var rStart = Math.max(0,curMsg-25);
-	var rEnd = Math.min(json.length,curMsg+26);
+	var rStart = Math.max(0,curMsg-125);
+	var rEnd = Math.min(json.length,curMsg+126);
 	for (i = rStart; i < rEnd; i++) {
 		results.push(json[i]);
 	}
