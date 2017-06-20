@@ -16,6 +16,7 @@ for key in hist:
     if usr not in users:
         users.append(usr)
 
+    #smilies
     if (len(msg) < 4):
         if ':' in msg:
             continue
