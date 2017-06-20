@@ -29,6 +29,7 @@ td:nth-child(2){font-weight: 900; text-align: right; border-right: 1px solid #cc
 	<option value="5000">5000</option>
 	<option value="10000">10000</option>
 </select> 
+<input id="fuzzy" type="checkbox">Fuzzy search</input>
 <table id="results"><tr><td><span id="loading">Loading >15MiB of data... (may take some seconds on slow connections)</td></tr></span></table>
 </body>
 <script>
@@ -55,8 +56,25 @@ $('#quantity').change(function(e) {
 function updateInput(){
 	searched = true;
 	if(!$("#filter").val()) return populateLasts();
-    fuse = new Fuse(json, {keys: ['html'], threshold: 0.5, minMatchCharLength: 1});
-    populateWithData(fuse.search($("#filter").val()))
+	
+	if($("#fuzzy").is(':checked')){
+		fuse = new Fuse(json, {keys: ['html'], threshold: 0.5, minMatchCharLength: 1});
+		populateWithData(fuse.search($("#filter").val()))
+	}
+	else{
+		var matches = [];
+		var keyword = $("#filter").val();
+		var c=0;
+		for (i = 0; i < json.length; i++) {
+			if(json[i].html.indexOf(keyword) !== -1){
+				matches.push(json[i])
+				c++;
+				if (c>$('#quantity').val())	break;
+			}
+		};
+		populateWithData(matches);
+	}
+
 }
 
 function populateLasts(){
@@ -67,7 +85,7 @@ function populateLasts(){
 
 function populateWithData(data){
 	$("#results").empty();
-	for (i = 0; i < Math.min(data.length, $('#quantity').val()); i++) {
+	for (i = 0; i < Math.min(data.length, $('#quantity').val()); i++) { //TODO inform user when we reached max allowed
 		$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+data[i].html+"</td></tr>");
 	};
 }
