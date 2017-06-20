@@ -24,4 +24,4 @@ for key in hist:
     gawdsrt += "<tr><td>"+dat+"</td><td>"+usr+"</td><td>"+msg+"</td></tr>"
 
 
-open("index.html", 'w').write(open("template.html", 'r').read().replace("[SHITGOESHERE]", gawdsrt))
+#open("index.html", 'w').write(open("template.html", 'r').read().replace("[SHITGOESHERE]", gawdsrt))
