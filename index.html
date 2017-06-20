@@ -4,7 +4,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.0.5/fuse.min.js"></script>
 <style>
-body {font-family: sans-serif}
+body {font-family: sans-serif; padding-top: 4em;}
 table {
     border-collapse: collapse;
     width: 100%;
@@ -35,7 +35,7 @@ div.tooltip {
     font-weight: bold;
 	background-color: #aef;
 }
-.highlightmsg {
+#highlightmsg {
 	background-color: #dfa!important;
 }
 #user{
@@ -44,9 +44,20 @@ div.tooltip {
 #msgnum{
     width: 5em;
 }
+#floatdiv {
+    position: fixed;
+    background: #dfa;
+    margin: 0;
+    padding: 0.5em;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+}
+
 </style>
 </head>
 <body>
+<div id="floatdiv">
 <span><b><a href="https://atomicgameengine.com/">Atomic</a> Gitter Archive by <a href="https://twitter.com/AlanGameDev">AlanGameDev</a> </b>| Messages: 101474, Users: 280, Updated: 2017-06-20</span>
 <div class="tooltip">
 <span class="tooltiptext">Type a message number and press enter. This is used to link results to conversation contexts</span>
@@ -352,7 +363,8 @@ div.tooltip {
 </select>
 </div>
 <input id="fuzzy" type="checkbox">Fuzzy search (needs beefy machine)</input>
-<table id="results"><tr><td><span id="loading">Loading 16.68MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
+</div>
+<table id="results"><tr><td><br><span id="loading">Loading 16.68MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
 </body>
 <script>
 var fuse, json;
@@ -367,9 +379,24 @@ $(function() {
 		};
 		
 		$("#loading").remove();
-		if(!searched) populateLasts();
+		
+		$(window).on('hashchange',function(){ 
+			onInitCH(false);
+		});
+		onInitCH(true);
+		
 	});
 });
+
+function onInitCH(first){
+	var urlmsg = document.URL.split("#m")[1];
+	if (urlmsg === undefined && first){
+		if(!searched) populateLasts();
+	}
+	else{
+		goToMessage(urlmsg);
+	}
+}
 
 $('#filter').keyup(function(e) {
 	if(!$("#fuzzy").is(':checked') && $('#quantity').val() < 200) return updateInput(); //if we want few results and isn't fuzzy, autosearch
@@ -398,8 +425,8 @@ function goToMessage(id){
 	var curMsg = json.length-1-id;
 	
 	var results = [];
-	var rStart = Math.max(0,curMsg-5);
-	var rEnd = Math.min(json.length,curMsg+6);
+	var rStart = Math.max(0,curMsg-25);
+	var rEnd = Math.min(json.length,curMsg+26);
 	for (i = rStart; i < rEnd; i++) {
 		results.push(json[i]);
 	}
@@ -409,7 +436,7 @@ function goToMessage(id){
 }
 
 function updateInput(){
-	if(json === 'undefined') return;
+	if(json === undefined) return;
 	searched = true;
 	if(!$("#filter").val()) return populateLasts();
 	
@@ -451,27 +478,34 @@ function populateWithData(data){
 	var max = $('#quantity').val()
 	var c = 0;
 	var kw = $("#filter").val();
+	var scrollToHL = false;
 
-	for (i = 0; i < (data.length); i++) {
+	for (i = Math.min(max, data.length-1); i >= 0; i--) {
 		if(user == "all" || data[i].user.toLowerCase() == user){
 			var msg;
 			if(kw && kw.length > 2)
-				msg = data[i].html.replace(new RegExp(kw, 'g'), '<span class="highlight">' + kw + '</span>');
+				msg = data[i].html.replace(new RegExp("(" + kw + ")(?!([^<]+)?>)", 'ig'), '<span class="highlight">$1</span>');
 			else
 				msg = data[i].html;
 		
 			var resHtml = '<tr><td><a onclick="goToMessage('+data[i].mid+')" href="#"><small>'+data[i].date+"<br>#"+data[i].mid+"</small></a></td><td>"+data[i].user+"</td><td>"+msg+"</td></tr>";
 			if(msghl >= 0 && data[i].mid == msghl){
-				resHtml = resHtml.substr(0, 3) + ' class="highlightmsg"' + resHtml.substr(3);
+				resHtml = resHtml.substr(0, 3) + ' id="highlightmsg"' + resHtml.substr(3);
+				scrollToHL=true;
 				msghl=-1;
 			}
 						
 			//$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+msg+"</td></tr>");
 			$("#results").append(resHtml);
-			c++; if (c>max)	break; //TODO inform user when we reached max allowed
+			//c++; if (c>max)	break; //TODO inform user when we reached max allowed
 		}
 	};
 	msghl = -1;
+	if(scrollToHL)
+		$('html,body').animate({scrollTop: $("#highlightmsg").offset().top-120},"fast");
+	else
+		$('html,body').animate({scrollTop: document.body.scrollHeight},"fast");
+	
 	
 }
 
