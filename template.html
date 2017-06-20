@@ -84,7 +84,7 @@ td:nth-child(3){width: 100%;}
 <!-- <input id="autosearch" type="checkbox">Automatic (or press Enter)</input> -->
 <span>Results:</span>
 <div class="tooltip">
-<span class="tooltiptext">If search is NOT fuzzy and you select 100 results, it searches as you type</span>
+<span class="tooltiptext">If search is NOT fuzzy and you select 100 results, it searches as you type. This value sets to a minimum of 1000 if fuzzy search is on.</span>
 <select id="quantity">
 	<option value="100">100</option>
 	<option value="500">500</option>
@@ -183,7 +183,8 @@ function updateInput(){
 	showlimit = true;
 
 	if($("#fuzzy").is(':checked')){
-		fuse = new Fuse(json, {keys: ['txt'], threshold: 0.5, minMatchCharLength: 1});
+	    if($('#quantity').val() < 1000) $('#quantity').val(1000)
+		fuse = new Fuse(json, {keys: ['txt'], threshold: 0.3, minMatchCharLength: 1});
 		populateWithData(fuse.search($("#filter").val()))
 	}
 	else{
