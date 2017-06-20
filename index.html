@@ -388,10 +388,10 @@ $(function() {
 	});
 });
 
-function onInitCH(first){
+function onInitCH(init){
 	var urlmsg = document.URL.split("#m")[1];
-	if (urlmsg === undefined && first){
-		if(!searched) populateLasts();
+	if (urlmsg === undefined){
+		if(!searched && init) populateLasts();
 	}
 	else{
 		goToMessage(urlmsg);
@@ -450,7 +450,7 @@ function updateInput(){
 		var c=0;
 		for (i = 0; i < json.length; i++) {
 			if(
-				json[i].html.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 //has match
+				json[i].html.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 //has match TODO strip html tags
 				//&&(
 				//$('#user').val() == "All" || json[i].user.toLowerCase() == user.toLowerCase() //user match exit TODO REFACTOR
 				//)

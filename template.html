@@ -108,10 +108,10 @@ $(function() {
 	});
 });
 
-function onInitCH(first){
+function onInitCH(init){
 	var urlmsg = document.URL.split("#m")[1];
-	if (urlmsg === undefined && first){
-		if(!searched) populateLasts();
+	if (urlmsg === undefined){
+		if(!searched && init) populateLasts();
 	}
 	else{
 		goToMessage(urlmsg);
