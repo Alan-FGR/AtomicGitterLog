@@ -44,5 +44,5 @@ for u in users:
 open("index.html", 'w').write(open("template.html", 'r').read()
                               .replace("[SHITGOESHERE]", 'Messages: {}, Users: {}, Updated: {}'.format(len(data),len(users),str(date.today())))
                               .replace("[USERSGOESHERE]", users_str)
-                              .replace("[SIZEGOESHERE]", '{:.2f}'.format(len(json.dumps(data).encode())/1000000))
+                              .replace("[SIZEGOESHERE]", '{:.2f}'.format((len(json.dumps(data).encode())/1000000)/4.5)) #approx zip compression
                               )
