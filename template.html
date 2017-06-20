@@ -17,19 +17,29 @@ tr:nth-child(even){background-color: #eee}
 td:nth-child(1){color: #aaa}
 td:nth-child(2){font-weight: 900; text-align: right; border-right: 1px solid #ccc;}
 td:nth-child(3){width: 100%;}
-div.tooltip {
-    display: inline;
+.tooltip {
+    position: relative;
+    display: inline-block;
 }
-.tooltiptext {
+.tooltip .tooltiptext {
     visibility: hidden;
-	background-color: #fea;
-    padding: 0.5em;
+    width: 300%;
+    background-color: #fea;
     position: absolute;
     z-index: 1;
-    margin-top: 1.5em;
+    top: 100%;
+    left: -220%;
+    white-space: normal;
+    padding: 0.5em;
 }
 .tooltip:hover .tooltiptext {
     visibility: visible;
+}
+#help {
+	position: fixed;
+	width: 90%;
+	top: 5%;
+	left: 5%;
 }
 .highlight {
     font-weight: bold;
@@ -58,9 +68,9 @@ div.tooltip {
 </head>
 <body>
 <div id="floatdiv">
-<span><b><a href="https://atomicgameengine.com/">Atomic</a> Gitter Archive by <a href="https://twitter.com/AlanGameDev">AlanGameDev</a> </b>| [SHITGOESHERE]</span>
+<span><b><a href="https://atomicgameengine.com/">Atomic</a> <a href="https://gitter.im/AtomicGameEngine/AtomicGameEngine">Gitter</a> Archive by <a href="https://twitter.com/AlanGameDev">AlanGameDev</a> </b>| [SHITGOESHERE]</span>
 <div class="tooltip">
-<span class="tooltiptext">Type a message number and press enter. This is used to link results to conversation contexts</span>
+<span class="tooltiptext">Type a message number and press enter to go directly to it.</span>
 <input placeholder="Message #" type="text" id="msgnum">
 </div>
 <br>
@@ -83,6 +93,10 @@ div.tooltip {
 </select>
 </div>
 <input id="fuzzy" type="checkbox">Fuzzy search (needs beefy machine)</input>
+<div class="tooltip">
+<span id="help" class="tooltiptext">Help Text Coming Soon. Ask on the <a href="https://gitter.im/AtomicGameEngine/AtomicGameEngine">chat</a> for help.</span>
+<b>HELP!</b>
+</div>
 </div>
 <table id="results"><tr><td><br><span id="loading">Loading [SIZEGOESHERE]MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
 </body>
@@ -200,7 +214,7 @@ function populateWithData(data){
 	var kw = $("#filter").val();
 	var scrollToHL = false;
 
-	for (i = data.length-1; i >= 0; i--) {
+	for (i = 0; i < data.length; i++) {
 		if(user == "all" || data[i].user.toLowerCase() == user){
 			var msg;
 			if(kw && kw.length > 2)
@@ -216,7 +230,7 @@ function populateWithData(data){
 			}
 						
 			//$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+msg+"</td></tr>");
-			$("#results").append(resHtml);
+			$("#results").prepend(resHtml);
 			c++; if (c>max)	break; //TODO inform user when we reached max allowed
 		}
 	};
