@@ -4,7 +4,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.0.5/fuse.min.js"></script>
 <style>
-body {font-family: sans-serif; padding-top: 4em;}
+body {font-family: sans-serif; padding-top: 4.5em;}
 table {
     border-collapse: collapse;
     width: 100%;
@@ -63,7 +63,9 @@ td:nth-child(3){width: 100%;}
     left: 0;
     white-space: nowrap;
 }
-
+#limitreached {
+    background-color: #f00;
+}
 </style>
 </head>
 <body>
@@ -97,12 +99,15 @@ td:nth-child(3){width: 100%;}
 <span id="help" class="tooltiptext">Help Text Coming Soon. Ask on the <a href="https://gitter.im/AtomicGameEngine/AtomicGameEngine">chat</a> for help.</span>
 <b>HELP!</b>
 </div>
+<br>
+<span id="limitreached" style="display: none;">DISPLAY LIMIT REACHED! SOME RESULTS WILL NOT BE DISPLAYED!</span>
 </div>
 <table id="results"><tr><td><br><span id="loading">Loading [SIZEGOESHERE]MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
 </body>
 <script>
 var fuse, json;
 var searched = false;
+var showlimit = false;
 
 $(function() {
     $.getJSON("log.json", function (data) {
@@ -173,7 +178,9 @@ function updateInput(){
 	if(json === undefined) return;
 	searched = true;
 	if(!$("#filter").val()) return populateLasts();
-	
+
+	showlimit = true;
+
 	if($("#fuzzy").is(':checked')){
 		fuse = new Fuse(json, {keys: ['html'], threshold: 0.5, minMatchCharLength: 1});
 		populateWithData(fuse.search($("#filter").val()))
@@ -201,12 +208,14 @@ function updateInput(){
 
 function populateLasts(){
 	if (json){
+	    showlimit = false;
 		populateWithData(json);
 	};
 }
 
 function populateWithData(data){
 	$("#results").empty();
+	$("#limitreached").toggle(false);
 	var user = $('#user').val().toLowerCase();
 	//for (i = 0; i < Math.min(data.length, $('#quantity').val()); i++) { //TODO inform user when we reached max allowed
 	var max = $('#quantity').val()
@@ -231,7 +240,11 @@ function populateWithData(data){
 						
 			//$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+msg+"</td></tr>");
 			$("#results").prepend(resHtml);
-			c++; if (c>max)	break; //TODO inform user when we reached max allowed
+			c++; if (c>max)	{
+			    if(showlimit)
+			        $("#limitreached").toggle(true);
+			    break; //TODO inform user when we reached max allowed
+            };
 		}
 	};
 	msghl = -1;
