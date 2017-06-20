@@ -16,21 +16,323 @@ th, td {
 tr:nth-child(even){background-color: #eee}
 td:nth-child(1){color: #aaa}
 td:nth-child(2){font-weight: 900; text-align: right; border-right: 1px solid #ccc;};
+div.tooltip {
+    display: inline;
+}
+.tooltiptext {
+    visibility: hidden;
+    background-color: #ff5;
+    position: absolute;
+    z-index: 1;
+    margin-top: 1.5em;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
 </style>
 </head>
 <body>
-<input placeholder="Search... (press Enter)" type="text" id="filter"></input>
+<span><b><a href="https://atomicgameengine.com/">Atomic</a> Gitter Archive by <a href="https://twitter.com/AlanGameDev">AlanGameDev</a> </b>| Messages: 101474, Users: 280, Updated: 2017-06-20</span><br>
+<input placeholder="Search... (press Enter)" type="text" id="filter">
+<span>User:</span>
+<select id="user">
+<option value="All">All</option>
+<option value="0xFireball">0xFireball</option>
+<option value="53PH1">53PH1</option>
+<option value="ANONIM-TEC">ANONIM-TEC</option>
+<option value="Aikat14">Aikat14</option>
+<option value="AlCaTrAzzALZ">AlCaTrAzzALZ</option>
+<option value="AlHafied_twitter">AlHafied_twitter</option>
+<option value="Alamantus">Alamantus</option>
+<option value="Alan-FGR">Alan-FGR</option>
+<option value="Anheurystics">Anheurystics</option>
+<option value="Asimov500">Asimov500</option>
+<option value="AxDSan">AxDSan</option>
+<option value="Biacode">Biacode</option>
+<option value="Bigmacbook">Bigmacbook</option>
+<option value="Bonfi96">Bonfi96</option>
+<option value="BrianRosamilia">BrianRosamilia</option>
+<option value="C-Fu">C-Fu</option>
+<option value="CTrauma">CTrauma</option>
+<option value="Clockwork-Rat">Clockwork-Rat</option>
+<option value="CodestarGames">CodestarGames</option>
+<option value="DGMurdockIII">DGMurdockIII</option>
+<option value="DPKW">DPKW</option>
+<option value="DeathArrow01">DeathArrow01</option>
+<option value="Dillybob92">Dillybob92</option>
+<option value="DuncanCragg">DuncanCragg</option>
+<option value="EdnGameDev">EdnGameDev</option>
+<option value="FarmerJoeII">FarmerJoeII</option>
+<option value="Fiishlord">Fiishlord</option>
+<option value="Fujikatoma">Fujikatoma</option>
+<option value="GarethNN">GarethNN</option>
+<option value="GarryDvaraza">GarryDvaraza</option>
+<option value="Geekuru">Geekuru</option>
+<option value="GrosSacASac">GrosSacASac</option>
+<option value="HeadClot">HeadClot</option>
+<option value="Hevedy">Hevedy</option>
+<option value="Heybye44">Heybye44</option>
+<option value="Husain136">Husain136</option>
+<option value="ImADolphin8">ImADolphin8</option>
+<option value="IsaiahRaspet">IsaiahRaspet</option>
+<option value="Jacktheking">Jacktheking</option>
+<option value="JimMarlowe">JimMarlowe</option>
+<option value="JohnnyWahib">JohnnyWahib</option>
+<option value="Jolltz">Jolltz</option>
+<option value="JoshEngebretson">JoshEngebretson</option>
+<option value="Joshhua5">Joshhua5</option>
+<option value="Julianobsg">Julianobsg</option>
+<option value="JumpWu">JumpWu</option>
+<option value="JustDevs">JustDevs</option>
+<option value="Kenji245">Kenji245</option>
+<option value="Keziolio">Keziolio</option>
+<option value="Kobusvdwalt9_twitter">Kobusvdwalt9_twitter</option>
+<option value="LaBlazer">LaBlazer</option>
+<option value="LaraEngebretson">LaraEngebretson</option>
+<option value="Lumak">Lumak</option>
+<option value="MJ-meo-dmt">MJ-meo-dmt</option>
+<option value="MJBrune_twitter">MJBrune_twitter</option>
+<option value="Magindra">Magindra</option>
+<option value="Mangafreak1995_twitter">Mangafreak1995_twitter</option>
+<option value="Mathon_Michael_twitter">Mathon_Michael_twitter</option>
+<option value="MitchCarroll">MitchCarroll</option>
+<option value="Murii">Murii</option>
+<option value="Noogah">Noogah</option>
+<option value="NovaSurfer">NovaSurfer</option>
+<option value="Nyt0x_twitter">Nyt0x_twitter</option>
+<option value="Orkuncakilkaya">Orkuncakilkaya</option>
+<option value="Pawbyte_twitter">Pawbyte_twitter</option>
+<option value="PeaceSells50">PeaceSells50</option>
+<option value="Phacanu">Phacanu</option>
+<option value="Phrohdoh">Phrohdoh</option>
+<option value="PierBover">PierBover</option>
+<option value="PlatinumCTNelson">PlatinumCTNelson</option>
+<option value="PowerCreek">PowerCreek</option>
+<option value="Protecdor_twitter">Protecdor_twitter</option>
+<option value="RealAquilus">RealAquilus</option>
+<option value="Renican">Renican</option>
+<option value="RenkenDz">RenkenDz</option>
+<option value="Rusmal18">Rusmal18</option>
+<option value="SLGamesStudio_twitter">SLGamesStudio_twitter</option>
+<option value="ScotFlux">ScotFlux</option>
+<option value="ServerCharlie_twitter">ServerCharlie_twitter</option>
+<option value="SiliconVall3y">SiliconVall3y</option>
+<option value="Sleaker">Sleaker</option>
+<option value="SoumenDas">SoumenDas</option>
+<option value="Syrou">Syrou</option>
+<option value="Tarik-B">Tarik-B</option>
+<option value="TheSuspiciousWombat">TheSuspiciousWombat</option>
+<option value="ThomasVansteenkiste">ThomasVansteenkiste</option>
+<option value="TiZ-EX1">TiZ-EX1</option>
+<option value="TortDoll">TortDoll</option>
+<option value="Type1J">Type1J</option>
+<option value="Virludus">Virludus</option>
+<option value="Wobling">Wobling</option>
+<option value="WonderWanderer">WonderWanderer</option>
+<option value="Y-way">Y-way</option>
+<option value="Yaha">Yaha</option>
+<option value="Yampik">Yampik</option>
+<option value="Zuldra">Zuldra</option>
+<option value="_antoniocg_twitter">_antoniocg_twitter</option>
+<option value="adebgamesoft">adebgamesoft</option>
+<option value="agusarg">agusarg</option>
+<option value="aliasc">aliasc</option>
+<option value="anteodt5">anteodt5</option>
+<option value="apalm1341">apalm1341</option>
+<option value="aussiemale23">aussiemale23</option>
+<option value="balmacefa">balmacefa</option>
+<option value="benwolf">benwolf</option>
+<option value="berserk82">berserk82</option>
+<option value="bibleuspro_twitter">bibleuspro_twitter</option>
+<option value="binary132">binary132</option>
+<option value="bite40297429_twitter">bite40297429_twitter</option>
+<option value="bitonator">bitonator</option>
+<option value="bkaradzic">bkaradzic</option>
+<option value="bleedingpixels">bleedingpixels</option>
+<option value="boberfly">boberfly</option>
+<option value="boccia_nico_twitter">boccia_nico_twitter</option>
+<option value="boduzapho">boduzapho</option>
+<option value="bostich83">bostich83</option>
+<option value="br3eze">br3eze</option>
+<option value="brandonlamb">brandonlamb</option>
+<option value="brokenshakles">brokenshakles</option>
+<option value="brunosxs">brunosxs</option>
+<option value="c4n4r">c4n4r</option>
+<option value="cbaal83">cbaal83</option>
+<option value="chanon">chanon</option>
+<option value="chaosbreak">chaosbreak</option>
+<option value="chengtsew313">chengtsew313</option>
+<option value="christoffer_sch_twitter">christoffer_sch_twitter</option>
+<option value="collingreen">collingreen</option>
+<option value="coolki">coolki</option>
+<option value="curly-brace">curly-brace</option>
+<option value="cwurtz">cwurtz</option>
+<option value="daffy-doomer">daffy-doomer</option>
+<option value="darkfronza">darkfronza</option>
+<option value="darkmatterjesu1_twitter">darkmatterjesu1_twitter</option>
+<option value="darkmatterjesus">darkmatterjesus</option>
+<option value="darrylryan">darrylryan</option>
+<option value="darrylryan_twitter">darrylryan_twitter</option>
+<option value="davinctor">davinctor</option>
+<option value="deep4U">deep4U</option>
+<option value="dennisnowack">dennisnowack</option>
+<option value="desiderantes">desiderantes</option>
+<option value="dfletcher">dfletcher</option>
+<option value="dj-hedgehog">dj-hedgehog</option>
+<option value="donnyv">donnyv</option>
+<option value="dorman">dorman</option>
+<option value="dragonCASTjosh">dragonCASTjosh</option>
+<option value="dralhafid">dralhafid</option>
+<option value="drbaks">drbaks</option>
+<option value="dwaynesch">dwaynesch</option>
+<option value="dwoozle">dwoozle</option>
+<option value="ednux">ednux</option>
+<option value="elvisxzhou">elvisxzhou</option>
+<option value="emamador">emamador</option>
+<option value="empyreanx">empyreanx</option>
+<option value="endel">endel</option>
+<option value="ericfoxx">ericfoxx</option>
+<option value="esakylli">esakylli</option>
+<option value="eugenegous">eugenegous</option>
+<option value="evanbooth_twitter">evanbooth_twitter</option>
+<option value="eye776">eye776</option>
+<option value="faahiero">faahiero</option>
+<option value="fdedraco">fdedraco</option>
+<option value="filharvey">filharvey</option>
+<option value="fohara">fohara</option>
+<option value="friesencr">friesencr</option>
+<option value="ganusajjan">ganusajjan</option>
+<option value="geeknologygt_twitter">geeknologygt_twitter</option>
+<option value="ggspringer">ggspringer</option>
+<option value="gokr">gokr</option>
+<option value="grumblie_twitter">grumblie_twitter</option>
+<option value="grumblygibson">grumblygibson</option>
+<option value="guzzard">guzzard</option>
+<option value="herculesdev">herculesdev</option>
+<option value="hilmardietrich">hilmardietrich</option>
+<option value="ip">ip</option>
+<option value="iresetagain21_twitter">iresetagain21_twitter</option>
+<option value="j0n31">j0n31</option>
+<option value="jacob-cross99">jacob-cross99</option>
+<option value="james0x0A">james0x0A</option>
+<option value="jason-allen-oneal">jason-allen-oneal</option>
+<option value="jazzay">jazzay</option>
+<option value="jeankvd">jeankvd</option>
+<option value="jenniferjenna">jenniferjenna</option>
+<option value="joeld42">joeld42</option>
+<option value="johndevsvensson">johndevsvensson</option>
+<option value="johngirvin">johngirvin</option>
+<option value="juliangabririgotti">juliangabririgotti</option>
+<option value="keithjohnston">keithjohnston</option>
+<option value="kenculate">kenculate</option>
+<option value="kestrelm">kestrelm</option>
+<option value="kinukin">kinukin</option>
+<option value="kungfooman">kungfooman</option>
+<option value="kyles-repository">kyles-repository</option>
+<option value="lKingShadow">lKingShadow</option>
+<option value="larscwallin">larscwallin</option>
+<option value="lewislepton">lewislepton</option>
+<option value="linuxtopia">linuxtopia</option>
+<option value="linzon">linzon</option>
+<option value="lolsona">lolsona</option>
+<option value="louis-mclaughlin">louis-mclaughlin</option>
+<option value="luigipacheco">luigipacheco</option>
+<option value="lunarraid">lunarraid</option>
+<option value="madsystem">madsystem</option>
+<option value="marynate">marynate</option>
+<option value="mattbenic">mattbenic</option>
+<option value="mentos1386">mentos1386</option>
+<option value="mertreis">mertreis</option>
+<option value="migueldeicaza">migueldeicaza</option>
+<option value="moshishanliu">moshishanliu</option>
+<option value="mrkenju">mrkenju</option>
+<option value="mrpompodopolos">mrpompodopolos</option>
+<option value="muafakul">muafakul</option>
+<option value="naive231">naive231</option>
+<option value="nefD">nefD</option>
+<option value="nem0">nem0</option>
+<option value="nilspin">nilspin</option>
+<option value="nuriu">nuriu</option>
+<option value="okb1100">okb1100</option>
+<option value="petia-davidova">petia-davidova</option>
+<option value="pgermishuys">pgermishuys</option>
+<option value="pilwon">pilwon</option>
+<option value="ppugend">ppugend</option>
+<option value="primeMover2011">primeMover2011</option>
+<option value="radicaled">radicaled</option>
+<option value="raheelx">raheelx</option>
+<option value="raizam">raizam</option>
+<option value="relhtml">relhtml</option>
+<option value="relyes">relyes</option>
+<option value="ricab">ricab</option>
+<option value="rokups">rokups</option>
+<option value="rosshadden">rosshadden</option>
+<option value="rovied">rovied</option>
+<option value="rsredsq">rsredsq</option>
+<option value="rubit0">rubit0</option>
+<option value="saurabhgupta2u">saurabhgupta2u</option>
+<option value="sebas77">sebas77</option>
+<option value="sekkit">sekkit</option>
+<option value="setarehpanahi">setarehpanahi</option>
+<option value="shaddockh">shaddockh</option>
+<option value="sheppepharis_twitter">sheppepharis_twitter</option>
+<option value="sim-ple">sim-ple</option>
+<option value="simonides">simonides</option>
+<option value="singam96">singam96</option>
+<option value="soundyogi">soundyogi</option>
+<option value="spacepluk">spacepluk</option>
+<option value="sruloart">sruloart</option>
+<option value="standtall007">standtall007</option>
+<option value="stjohnd777">stjohnd777</option>
+<option value="suncaller">suncaller</option>
+<option value="sunny_morgan_twitter">sunny_morgan_twitter</option>
+<option value="superjudge">superjudge</option>
+<option value="takhimi">takhimi</option>
+<option value="talves">talves</option>
+<option value="tarekkarray">tarekkarray</option>
+<option value="tdpsk">tdpsk</option>
+<option value="techtide">techtide</option>
+<option value="tele1">tele1</option>
+<option value="thaaks">thaaks</option>
+<option value="tobiasbp">tobiasbp</option>
+<option value="toddgibson">toddgibson</option>
+<option value="tomcis147_twitter">tomcis147_twitter</option>
+<option value="tonimichel-hdm">tonimichel-hdm</option>
+<option value="torinr">torinr</option>
+<option value="torugok_twitter">torugok_twitter</option>
+<option value="triptych">triptych</option>
+<option value="troll-kadabra">troll-kadabra</option>
+<option value="umutozdemir97">umutozdemir97</option>
+<option value="v4l3r10">v4l3r10</option>
+<option value="vegarringdal">vegarringdal</option>
+<option value="webworkio">webworkio</option>
+<option value="weinandvv">weinandvv</option>
+<option value="wellnoidea">wellnoidea</option>
+<option value="willstdueswissen">willstdueswissen</option>
+<option value="xcgasparxc">xcgasparxc</option>
+<option value="xenburn">xenburn</option>
+<option value="yaskhan">yaskhan</option>
+<option value="youssef02">youssef02</option>
+<option value="zenithght">zenithght</option>
+<option value="zetashift">zetashift</option>
+<option value="zspeedsonic_twitter">zspeedsonic_twitter</option>
+
+</select>
 <!-- <input id="autosearch" type="checkbox">Automatic (or press Enter)</input> -->
 <span>Results:</span>
+<div class="tooltip" style="display:inline;">
+<span class="tooltiptext">If search is NOT fuzzy and you select 100 results, it searches as you type</span>
 <select id="quantity">
+	<option value="100">100</option>
 	<option value="500">500</option>
 	<option value="1000">1000</option>
 	<option value="2000">2000</option>
 	<option value="5000">5000</option>
 	<option value="10000">10000</option>
-</select> 
+</select>
+</div>
 <input id="fuzzy" type="checkbox">Fuzzy search (needs beefy machine)</input>
-<table id="results"><tr><td><span id="loading">Loading >15MiB of data... (may take some seconds on slow connections)</td></tr></span></table>
+<table id="results"><tr><td><span id="loading">Loading 16.68MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
 </body>
 <script>
 var fuse, json;
@@ -45,6 +347,7 @@ $(function() {
 });
 
 $('#filter').keyup(function(e) {
+	if(!$("#fuzzy").is(':checked') && $('#quantity').val() < 200) return updateInput(); //if we want few results and isn't fuzzy, autosearch
 	if(e.which != 13 && !$("#autosearch").is(':checked')) return;
 	updateInput();
 });
@@ -53,7 +356,12 @@ $('#quantity').change(function(e) {
 	updateInput();
 });
 
+$('#user').change(function(e) {
+	updateInput();
+});
+
 function updateInput(){
+	if(json === 'undefined') return;
 	searched = true;
 	if(!$("#filter").val()) return populateLasts();
 	
@@ -66,10 +374,15 @@ function updateInput(){
 		var keyword = $("#filter").val();
 		var c=0;
 		for (i = 0; i < json.length; i++) {
-			if(json[i].html.toLowerCase().indexOf(keyword.toLowerCase()) !== -1){
+			if(
+				json[i].html.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 //has match
+				//&&(
+				//$('#user').val() == "All" || json[i].user.toLowerCase() == user.toLowerCase() //user match exit TODO REFACTOR
+				//)
+			){
 				matches.push(json[i])
 				c++;
-				if (c>$('#quantity').val())	break;
+				//if (c>$('#quantity').val())	break;
 			}
 		};
 		populateWithData(matches);
@@ -85,8 +398,15 @@ function populateLasts(){
 
 function populateWithData(data){
 	$("#results").empty();
-	for (i = 0; i < Math.min(data.length, $('#quantity').val()); i++) { //TODO inform user when we reached max allowed
-		$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+data[i].html+"</td></tr>");
+	var user = $('#user').val().toLowerCase();
+	//for (i = 0; i < Math.min(data.length, $('#quantity').val()); i++) { //TODO inform user when we reached max allowed
+	var max = $('#quantity').val()
+	var c = 0;
+	for (i = 0; i < (data.length); i++) {
+		if(user == "all" || data[i].user.toLowerCase() == user){
+			$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+data[i].html+"</td></tr>");
+			c++; if (c>max)	break; //TODO inform user when we reached max allowed
+		}
 	};
 }
 

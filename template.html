@@ -1,28 +1,134 @@
-<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="keywords" content="javascript, jquery, lazy load, performance, plugin" />
-        <meta name="author" content="Alan">
-        <meta name="viewport" content="width=device-width">
-        <title>Alan FGR bhtmlt dev v0.02f-b55.2</title>
-    </head>
+<head>
+<meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.0.5/fuse.min.js"></script>
+<style>
+body {font-family: sans-serif}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    text-align: left;
+    padding: 0.2em;
+}
+tr:nth-child(even){background-color: #eee}
+td:nth-child(1){color: #aaa}
+td:nth-child(2){font-weight: 900; text-align: right; border-right: 1px solid #ccc;};
+div.tooltip {
+    display: inline;
+}
+.tooltiptext {
+    visibility: hidden;
+    background-color: #ff5;
+    position: absolute;
+    z-index: 1;
+    margin-top: 1.5em;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+</style>
+</head>
+<body>
+<span><b><a href="https://atomicgameengine.com/">Atomic</a> Gitter Archive by <a href="https://twitter.com/AlanGameDev">AlanGameDev</a> </b>| [SHITGOESHERE]</span><br>
+<input placeholder="Search... (press Enter)" type="text" id="filter">
+<span>User:</span>
+<select id="user">
+[USERSGOESHERE]
+</select>
+<!-- <input id="autosearch" type="checkbox">Automatic (or press Enter)</input> -->
+<span>Results:</span>
+<div class="tooltip" style="display:inline;">
+<span class="tooltiptext">If search is NOT fuzzy and you select 100 results, it searches as you type</span>
+<select id="quantity">
+	<option value="100">100</option>
+	<option value="500">500</option>
+	<option value="1000">1000</option>
+	<option value="2000">2000</option>
+	<option value="5000">5000</option>
+	<option value="10000">10000</option>
+</select>
+</div>
+<input id="fuzzy" type="checkbox">Fuzzy search (needs beefy machine)</input>
+<table id="results"><tr><td><span id="loading">Loading [SIZEGOESHERE]MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
+</body>
+<script>
+var fuse, json;
+var searched = false;
 
-    <style>
-	</style>
+$(function() {
+    $.getJSON("log.json", function (data) {
+		json = data;
+		$("#loading").remove();
+		if(!searched) populateLasts();
+	});
+});
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="http://luis-almeida.github.io/unveil/jquery.unveil.js"></script>
-    <script>
-    $(function() {
-        $("li img").unveil(3000);
-    });
-    </script>
+$('#filter').keyup(function(e) {
+	if(!$("#fuzzy").is(':checked') && $('#quantity').val() < 200) return updateInput(); //if we want few results and isn't fuzzy, autosearch
+	if(e.which != 13 && !$("#autosearch").is(':checked')) return;
+	updateInput();
+});
+
+$('#quantity').change(function(e) {
+	updateInput();
+});
+
+$('#user').change(function(e) {
+	updateInput();
+});
+
+function updateInput(){
+	if(json === 'undefined') return;
+	searched = true;
+	if(!$("#filter").val()) return populateLasts();
 	
-	<body>
-	<table>
-	[SHITGOESHERE]
-	</table>
-	</body>
+	if($("#fuzzy").is(':checked')){
+		fuse = new Fuse(json, {keys: ['html'], threshold: 0.5, minMatchCharLength: 1});
+		populateWithData(fuse.search($("#filter").val()))
+	}
+	else{
+		var matches = [];
+		var keyword = $("#filter").val();
+		var c=0;
+		for (i = 0; i < json.length; i++) {
+			if(
+				json[i].html.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 //has match
+				//&&(
+				//$('#user').val() == "All" || json[i].user.toLowerCase() == user.toLowerCase() //user match exit TODO REFACTOR
+				//)
+			){
+				matches.push(json[i])
+				c++;
+				//if (c>$('#quantity').val())	break;
+			}
+		};
+		populateWithData(matches);
+	}
+
+}
+
+function populateLasts(){
+	if (json){
+		populateWithData(json);
+	};
+}
+
+function populateWithData(data){
+	$("#results").empty();
+	var user = $('#user').val().toLowerCase();
+	//for (i = 0; i < Math.min(data.length, $('#quantity').val()); i++) { //TODO inform user when we reached max allowed
+	var max = $('#quantity').val()
+	var c = 0;
+	for (i = 0; i < (data.length); i++) {
+		if(user == "all" || data[i].user.toLowerCase() == user){
+			$("#results").append("<tr><td>"+data[i].date+"</td><td>"+data[i].user+"</td><td>"+data[i].html+"</td></tr>");
+			c++; if (c>max)	break; //TODO inform user when we reached max allowed
+		}
+	};
+}
+
+</script>
 </html>
