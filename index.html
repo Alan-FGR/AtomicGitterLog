@@ -75,6 +75,14 @@ td:nth-child(3){width: 100%;}
 	display: inline;
 	margin: -1em 0;
 }
+#gittertab {
+    background-color: #0a5;
+	line-height: 0.8em;
+	position: fixed;
+	right: 0;
+	top: 45%;
+	font-weight: 800;
+}
 </style>
 </head>
 <body>
@@ -414,6 +422,7 @@ and the output is parsed and this page is generated using <a href="https://githu
 <span id="limitreached" style="display: none;">DISPLAY LIMIT REACHED! SOME RESULTS WILL NOT BE DISPLAYED!</span>
 </div>
 <table id="results"><tr><td><br><span id="loading">Downloading 3.21MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
+<button id="gittertab" class="js-gitter-toggle-chat-button" onclick="loadGitter()"><<br><br>G<br>I<br>T<br>T<br>E<br>R<br><br>C<br>H<br>A<br>T<br><br><</button>
 </body>
 <script>
 var fuse, json;
@@ -579,11 +588,30 @@ function populateWithData(data){
 	
 }
 
+
+//GITTER STUFF BROKEN AF :( hacky uglily workarounded 
+var gitterloaded = false;
+var normtxt = ''
+function loadGitter(){
+	if (gitterloaded) return;
+	gitterloaded = true;
+	normtxt = $("#gittertab").html();
+	$("#gittertab").html("W<br>A<br>I<br>T");
+	$.getScript( 'https://sidecar.gitter.im/dist/sidecar.v1.js', function( data, textStatus, jqxhr ) {
+		$("#gittertab").html(normtxt);
+    } );
+}
+
+//document.addEventListener('gitter-sidecar-ready', function(e) {
+//  e.detail.Chat.toggleChat(false);
+//});
+
 ((window.gitter = {}).chat = {}).options = {
-    room: 'AtomicGameEngine/AtomicGameEngine',
-    showChatByDefault: false
-  };
+	room: 'AtomicGameEngine/AtomicGameEngine',
+	showChatByDefault: true,
+	activationElement: '#gittertab',  //TOTALLY BROKEN SHIT when line before is true: WORKAROUNDING...
+};
 
 </script>
-<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+<!-- <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script> -->
 </html>
