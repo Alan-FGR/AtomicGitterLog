@@ -16,10 +16,10 @@ for key in hist:
     if usr not in users:
         users.append(usr)
 
-    #smilies
-    if (len(msg) < 4):
-        if ':' in msg:
-            continue
+    #smilies COMMENTING - LETS HAVE 'EM!
+    # if (len(msg) < 4):
+        # if ':' in msg:
+            # continue
 
     # TODO UNCOMMENT WHEN YOU CAN MAKE LAZY LOADER WORK :(
     # if ("<img" in log['html']):
@@ -33,7 +33,7 @@ for key in hist:
         'html': msg
     })
 
-#open("log.json", 'w').write(json.dumps(data))  # , indent=2))
+open("log.json", 'w').write(json.dumps(data))  # , indent=2))
 
 users.sort()
 users.insert(0,"All")
@@ -44,5 +44,5 @@ for u in users:
 open("index.html", 'w').write(open("template.html", 'r').read()
                               .replace("[SHITGOESHERE]", 'Messages: {}, Users: {}, Updated: {}'.format(len(data),len(users),str(date.today())))
                               .replace("[USERSGOESHERE]", users_str)
-                              .replace("[SIZEGOESHERE]", '{:.2f}'.format((len(json.dumps(data).encode())/1000000)/4.5)) #approx zip compression
+                              .replace("[SIZEGOESHERE]", '{:.2f}'.format((len(json.dumps(data).encode())/1000000)/4.75)) #approx zip compression
                               )

@@ -3,6 +3,10 @@
 <meta charset="UTF-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.0.5/fuse.min.js"></script>
+
+<!-- EMOJIS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/emojify.js/0.9.5/emojify.min.js"></script>
+
 <style>
 body {font-family: sans-serif; padding-top: 4.5em;}
 table {
@@ -36,10 +40,10 @@ td:nth-child(3){width: 100%;}
     visibility: visible;
 }
 #help {
-	position: fixed;
-	width: 90%;
-	top: 5%;
-	left: 5%;
+	background-color: #aef;
+	top: 0;
+	width: 30em;
+	left: -30em;
 }
 .highlight {
     font-weight: bold;
@@ -66,6 +70,30 @@ td:nth-child(3){width: 100%;}
 #limitreached {
     background-color: #f00;
 }
+.emoji {
+	height: 2em;
+	display: inline;
+	margin: -1em 0;
+}
+#gittertab {
+    background-color: #0a5;
+	line-height: 0.8em;
+	position: fixed;
+	right: 0;
+	top: 45%;
+	font-weight: 800;
+}
+.gitter-chat-embed-action-bar-item-pop-out {
+    margin-right: auto!important;
+}
+.gitter-chat-embed-action-bar-item-collapse-chat {
+    width: 100%!important;
+    height: 60px!important;
+    background-position-x: right!important;
+    background-size: 60px!important;
+    padding: 10px!important;
+}
+
 </style>
 </head>
 <body>
@@ -96,13 +124,36 @@ td:nth-child(3){width: 100%;}
 </div>
 <input id="fuzzy" type="checkbox">Fuzzy search (needs beefy machine)</input>
 <div class="tooltip">
-<span id="help" class="tooltiptext">Help Text Coming Soon. Ask on the <a href="https://gitter.im/AtomicGameEngine/AtomicGameEngine">chat</a> for help.</span>
-<b>HELP!</b>
+<span id="help" class="tooltiptext">
+
+<h3>Welcome to the Atomic Logs!</h3>
+Feel free to <a href="https://gitter.im/AtomicGameEngine/AtomicGameEngine">join the chat</a>.<br>
+
+<h3>About</h3>
+This web page displays an easily searchable log archive for the Atomic Game Engine Gitter.<br>
+Chat logs are archived using <a href="https://github.com/Alan-FGR/GitterLogger">this tool, </a>
+and the output is parsed and this page is generated using <a href="https://github.com/Alan-FGR/AtomicGitterLog">this tool</a>.<br>
+
+<h3>Having problems?</h3>
+<a href="https://github.com/Alan-FGR/AtomicGitterLog/issues/new">Click here to open an issue on GitHub</a> or 
+<a href="https://gitter.im/AtomicGameEngine/AtomicGameEngine">join us on Gitter</a>.<br>
+
+<h3>Dev Links</h3>
+<a href="https://github.com/Alan-FGR/GitterLogger">https://github.com/Alan-FGR/GitterLogger</a><br>
+<a href="https://github.com/Alan-FGR/AtomicGitterLog">https://github.com/Alan-FGR/AtomicGitterLog</a><br>
+
+<h3>Licenses</h3>
+<a href="https://github.com/emojione/emojify.js/blob/master/LICENSE-IMAGES.md">Emoji Images License</a><br>
+<a href="https://github.com/emojione/emojify.js/blob/master/LICENSE.md">Emojify License</a><br>
+
+</span>
+<b>INFO</b>
 </div>
 <br>
 <span id="limitreached" style="display: none;">DISPLAY LIMIT REACHED! SOME RESULTS WILL NOT BE DISPLAYED!</span>
 </div>
-<table id="results"><tr><td><br><span id="loading">Loading [SIZEGOESHERE]MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
+<table id="results"><tr><td><br><span id="loading">Downloading ~[SIZEGOESHERE]MiB of data... (may take some seconds on slow connections)</span></td></tr></table>
+<button id="gittertab" class="js-gitter-toggle-chat-button" onclick="loadGitter()"><<br><br>G<br>I<br>T<br>T<br>E<br>R<br><br>C<br>H<br>A<br>T<br><br><</button>
 </body>
 <script>
 var fuse, json;
@@ -113,24 +164,34 @@ $(function() {
     $.getJSON("log.json", function (data) {
 		json = data;
 		
-		for (i = 0; i < json.length; i++) {
-			json[i].mid = json.length-1-i;
-			json[i].txt = $("<div/>").html(json[i].html).text();//TODO see if there's something more efficient
-		};
-		
-		$("#loading").remove();
-		
-		$(window).on('hashchange',function(){ 
-			onInitCH(false);
+		$.when($("#loading").append("<b> [DONE!]</b><br><br>Parsing data and building search cache... (may take some seconds on slow processors)"))
+		.then(function() {		
+			for (i = 0; i < json.length; i++) {
+				json[i].mid = json.length-1-i;
+				json[i].txt = $("<div/>").html(json[i].html).text();//TODO see if there's something more efficient
+			};
+			
+			$("#loading").remove();
+			
+			$(window).on('hashchange',function(){ 
+				onInitCH(false);
+			});
+			onInitCH(true);
 		});
-		onInitCH(true);
 		
 	});
 });
 
+$(window).on("load",function () {
+	emojify.setConfig({
+		img_dir: 'images/emoji',
+		tag_type:'ej',
+	});
+});
+
 function onInitCH(init){
-	var urlmsg = document.URL.split("#m")[1];
-	if (urlmsg === undefined){
+	var urlmsg = document.URL.split("#")[1];
+	if (!urlmsg || urlmsg === undefined){
 		if(!searched && init) populateLasts();
 	}
 	else{
@@ -219,7 +280,6 @@ function populateWithData(data){
 	$("#results").empty();
 	$("#limitreached").toggle(false);
 	var user = $('#user').val().toLowerCase();
-	//for (i = 0; i < Math.min(data.length, $('#quantity').val()); i++) { //TODO inform user when we reached max allowed
 	var max = $('#quantity').val()
 	var c = 0;
 	var kw = $("#filter").val();
@@ -233,7 +293,7 @@ function populateWithData(data){
 			else
 				msg = data[i].html;
 		
-			var resHtml = '<tr><td><a onclick="goToMessage('+data[i].mid+')" href="#"><small>'+data[i].date+"<br>#"+data[i].mid+"</small></a></td><td>"+data[i].user+"</td><td>"+msg+"</td></tr>";
+			var resHtml = '<tr><td><a href="#'+data[i].mid+'"><small>'+data[i].date+"<br>#"+data[i].mid+"</small></a></td><td>"+data[i].user+"</td><td><ej>"+msg+"</ej></td></tr>";
 			if(msghl >= 0 && data[i].mid == msghl){
 				resHtml = resHtml.substr(0, 3) + ' id="highlightmsg"' + resHtml.substr(3);
 				scrollToHL=true;
@@ -250,6 +310,7 @@ function populateWithData(data){
 		}
 	};
 	msghl = -1;
+	emojify.run();
 	if(scrollToHL)
 		$('html,body').animate({scrollTop: $("#highlightmsg").offset().top-120},"fast");
 	else
@@ -258,5 +319,30 @@ function populateWithData(data){
 	
 }
 
+
+//GITTER STUFF BROKEN AF :( hacky uglily workarounded 
+var gitterloaded = false;
+var normtxt = ''
+function loadGitter(){
+	if (gitterloaded) return;
+	gitterloaded = true;
+	normtxt = $("#gittertab").html();
+	$("#gittertab").html("W<br>A<br>I<br>T");
+	$.getScript( 'https://sidecar.gitter.im/dist/sidecar.v1.js', function( data, textStatus, jqxhr ) {
+		$("#gittertab").html(normtxt);
+    } );
+}
+
+//document.addEventListener('gitter-sidecar-ready', function(e) {
+//  e.detail.Chat.toggleChat(false);
+//});
+
+((window.gitter = {}).chat = {}).options = {
+	room: 'AtomicGameEngine/AtomicGameEngine',
+	showChatByDefault: true,
+	activationElement: '#gittertab',  //TOTALLY BROKEN SHIT when line before is true: WORKAROUNDING...
+};
+
 </script>
+<!-- <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script> -->
 </html>
